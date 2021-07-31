@@ -337,6 +337,14 @@ qemu-system-x86_64 -device usb-ehci \
 The new USB 2.0 host controller is 82801DB/DBM (ICH4/ICH4-M) (vendor
 ID 0x8086, device ID 0x24cd).
 
+# Sizing the Base Address Registers
+
+- [ics uci: PCI Local Bus Specification, Revision 2.2](http://www.ics.uci.edu/~harris/ics216/pci/PCI_22.pdf)
+
+For mapping the USB host controller into the memory space, required memory size
+needs to be read from the BAR registers. The algorithm is described in the PCI
+specification.
+
 # The USB host controller
 
 - [wiki osdev: USB](https://wiki.osdev.org/USB)

@@ -27,7 +27,7 @@ all: $(IMGS)
 boot.o: boot.asm | $(OBJDIR)
 	$(INIT_AS) -o $(OBJDIR)/$@ $<
 
-%.o: %.c | $(OBJDIR)
+%.o: %.c assert.h | $(OBJDIR)
 	$(INIT_GCC) $(INIT_CFLAGS) -o $(OBJDIR)/$@ -c $<
 
 init.bin: boot.o init.o io_port.o multiboot.o pci.o terminal.o

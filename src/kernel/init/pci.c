@@ -19,7 +19,7 @@
 #define PCI_CONFIG_DEVICE_NUMBER_OFFSET 11
 #define PCI_CONFIG_FUNCTION_NUMBER_OFFSET 8
 
-#define PCI_INVALID_VENDOR_ID 0xFFFF
+#define PCI_HEADER_BAR_OFFSET 0x10
 
 static uint32_t
 pci_config_read_dword(const struct pci_function_address *const address,

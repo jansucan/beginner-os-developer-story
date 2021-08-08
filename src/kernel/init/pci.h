@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#define PCI_INVALID_VENDOR_ID 0xFFFF
+
 struct pci_function_address {
     uint16_t bus_number;
     uint8_t device_number;

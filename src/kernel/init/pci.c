@@ -19,11 +19,11 @@
 #define PCI_CONFIG_DEVICE_NUMBER_OFFSET 11
 #define PCI_CONFIG_FUNCTION_NUMBER_OFFSET 8
 
-#define PCI_HEADER_BAR_OFFSET 0x10
+#define PCI_HEADER_BAR_OFFSET(reg_index) (0x10 + (reg_index * sizeof(uint32_t)))
 
 static uint32_t
-pci_config_read_dword(const struct pci_function_address *const address,
-                      uint8_t byte_offset)
+pci_config_get_addr(const struct pci_function_address *const address,
+                    uint8_t byte_offset)
 {
     const uint32_t enable = 1U << PCI_CONFIG_ENABLE_BIT_OFFSET;
     const uint32_t bus = ((uint32_t)address->bus_number)
@@ -39,9 +39,25 @@ pci_config_read_dword(const struct pci_function_address *const address,
 
     const uint32_t addr = enable | bus | device | function | offset;
 
-    io_port_out_dword(PCI_IO_CONFIG_ADDRESS, addr);
+    return addr;
+}
 
+static uint32_t
+pci_config_read_dword(const struct pci_function_address *const address,
+                      uint8_t byte_offset)
+{
+    io_port_out_dword(PCI_IO_CONFIG_ADDRESS,
+                      pci_config_get_addr(address, byte_offset));
     return io_port_in_dword(PCI_IO_CONFIG_DATA);
+}
+
+static void
+pci_config_write_dword(const struct pci_function_address *const address,
+                       uint8_t byte_offset, uint32_t value)
+{
+    io_port_out_dword(PCI_IO_CONFIG_ADDRESS,
+                      pci_config_get_addr(address, byte_offset));
+    io_port_out_dword(PCI_IO_CONFIG_DATA, value);
 }
 
 static uint16_t
@@ -153,4 +169,16 @@ bool pci_function_iterator_next(struct pci_function_address *const address,
     }
 
     return (header->vendor_id != PCI_INVALID_VENDOR_ID);
+}
+
+uint32_t pci_read_bar_register(struct pci_function_address *const address,
+                               uint8_t bar_index)
+{
+    return pci_config_read_dword(address, PCI_HEADER_BAR_OFFSET(bar_index));
+}
+
+void pci_write_bar_register(struct pci_function_address *const address,
+                            uint8_t bar_index, uint32_t value)
+{
+    pci_config_write_dword(address, PCI_HEADER_BAR_OFFSET(bar_index), value);
 }

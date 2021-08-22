@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#define PCI_BASE_ADDRESS_REGISTER_COUNT 6
+
 #define PCI_INVALID_VENDOR_ID 0xFFFF
 
 struct pci_function_address {
@@ -25,5 +27,10 @@ void pci_function_iterator_init(struct pci_function_address *const address,
                                 struct pci_header_common *const header);
 bool pci_function_iterator_next(struct pci_function_address *const address,
                                 struct pci_header_common *const header);
+
+uint32_t pci_read_bar_register(struct pci_function_address *const address,
+                               uint8_t bar_index);
+void pci_write_bar_register(struct pci_function_address *const address,
+                            uint8_t bar_index, uint32_t value);
 
 #endif

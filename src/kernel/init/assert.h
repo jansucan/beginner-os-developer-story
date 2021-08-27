@@ -7,12 +7,8 @@
 
 #define ASSERT(c, m)                                                           \
     if (!(c)) {                                                                \
-        terminal_write_string("\n");                                           \
-        terminal_write_string("ASSERT FAILED: ");                              \
-        terminal_write_string(__FILE__);                                       \
-        terminal_write_string(": ");                                           \
-        terminal_write_string(m);                                              \
-        terminal_write_string("\n");                                           \
+        terminal_printf("\n");                                                 \
+        terminal_printf("ASSERT FAILED: %s: %s\n", __FILE__, m);               \
         for (;;) {                                                             \
             ;                                                                  \
         }                                                                      \

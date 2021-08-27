@@ -30,43 +30,29 @@
 
 static void print_pci_device_list_header(void)
 {
-    terminal_write_string("\n");
-    terminal_write_string("PCI devices:\n");
-
-    terminal_write_string(
-        "  VendorID   DeviceID   Class      Subclass   ProgIF\n");
+    terminal_printf("\n");
+    terminal_printf("PCI devices:\n");
+    terminal_printf("  VendorID   DeviceID   Class      Subclass   ProgIF\n");
 }
 
 static void
 print_pci_header_common(const struct pci_header_common *const pci_header)
 {
-    terminal_write_string("  ");
-    terminal_write_uint32(pci_header->vendor_id);
-    terminal_write_string(" ");
-    terminal_write_uint32(pci_header->device_id);
-    terminal_write_string(" ");
-    terminal_write_uint32(pci_header->class_code);
-    terminal_write_string(" ");
-    terminal_write_uint32(pci_header->subclass);
-    terminal_write_string(" ");
-    terminal_write_uint32(pci_header->prog_if);
-    terminal_write_string("\n");
+    terminal_printf("  %x", pci_header->vendor_id);
+    terminal_printf(" %x", pci_header->device_id);
+    terminal_printf(" %x", pci_header->class_code);
+    terminal_printf(" %x", pci_header->subclass);
+    terminal_printf(" %x\n", pci_header->prog_if);
 }
 
 static void
 print_usb_controller_info(const struct pci_function_address *const addr)
 {
-    terminal_write_string("Found USB controller:\n");
-    terminal_write_string("  name: ");
-    terminal_write_string(USB_CONTROLLER_NAME);
-    terminal_write_string("\n");
-    terminal_write_string("  PCI:  bus=");
-    terminal_write_uint32(addr->bus_number);
-    terminal_write_string("  device=");
-    terminal_write_uint32(addr->device_number);
-    terminal_write_string("  function=");
-    terminal_write_uint32(addr->function_number);
-    terminal_write_string("\n");
+    terminal_printf("Found USB controller:\n");
+    terminal_printf("  name: %s\n", USB_CONTROLLER_NAME);
+    terminal_printf("  PCI:  bus=%x  device=%x  function=%x\n",
+                    addr->bus_number, addr->device_number,
+                    addr->function_number);
 }
 
 // cppcheck-suppress unusedFunction
@@ -98,7 +84,7 @@ void kernel_main(void)
             usb_controller_pci_header = pci_header;
         }
     }
-    terminal_write_string("\n");
+    terminal_printf("\n");
 
     ASSERT(
         (usb_controller_pci_header.vendor_id == USB_CONTROLLER_PCI_VENDOR_ID) &&

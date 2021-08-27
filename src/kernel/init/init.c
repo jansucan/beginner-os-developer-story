@@ -93,4 +93,9 @@ void kernel_main(void)
         "USB controller not found");
 
     print_usb_controller_info(&usb_controller_pci_address);
+
+    for (uint8_t i = 0; i < PCI_BASE_ADDRESS_REGISTER_COUNT; ++i) {
+        terminal_printf("  BAR register %d: %x\n", i,
+                        pci_read_bar_register(&usb_controller_pci_address, i));
+    }
 }
